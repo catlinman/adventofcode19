@@ -1,6 +1,5 @@
-
-use std::fs;
 use std::env;
+use std::fs;
 use std::num;
 
 // Recursively calculate fuel.
@@ -16,12 +15,15 @@ fn recurse_fuel(mass: u32, division: u32, subtraction: u32) -> u32 {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Read input argument. Skip first execution argument, flatten further arguments as input path.
-    let contents: String = fs::read_to_string(env::args().skip(1)
-        .fold(String::new(), |acc, cur| format!("{}{}", acc, cur))
-    ).expect("Failed to read the input file!");
+    let contents: String = fs::read_to_string(
+        env::args()
+            .skip(1)
+            .fold(String::new(), |acc, cur| format!("{}{}", acc, cur)),
+    )?;
 
     // Split the strhing into lines, parse the array as a u32 and sum all values.
-    let sum: Result<u32, num::ParseIntError> = contents.lines()
+    let sum: Result<u32, num::ParseIntError> = contents
+        .lines()
         .map(|value| Ok(recurse_fuel(value.parse::<u32>()?, 3, 2)))
         .sum();
 
